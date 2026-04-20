@@ -1,5 +1,11 @@
 import { Eye, Flame } from "lucide-react";
 
+import imgQuanzhouOldCity from '../assets/images/quanzhou_old_city.jpg';
+import imgNanguanMusic from '../assets/images/nanguan_music.jpg';
+import imgDehuaPorcelain from '../assets/images/dehua_porcelain.jpg';
+import imgAnpingBridge from '../assets/images/anping_bridge.jpg';
+import imgTieguanyin from '../assets/images/tieguanyin.jpg';
+
 export default function News() {
   const newsList = [
     {
@@ -7,28 +13,28 @@ export default function News() {
       title: "“宋元中国·海丝泉州”申遗成功，22处代表性古迹入选《世界遗产名录》",
       date: "2021-07-25",
       views: "9.5k",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/20230130_Old_City_of_Quanzhou_01.jpg/960px-20230130_Old_City_of_Quanzhou_01.jpg"
+      img: imgQuanzhouOldCity
     },
     {
       id: 2,
       title: "南音《百鸟归巢》亮相春晚，千年古乐绽放时代魅力与数字创新",
       date: "2023-01-22",
       views: "12.8k",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Concert_de_musique_chinoise_Nanguan_%28Auditorium_du_mus%C3%A9e_Guimet%29_%288027971895%29.jpg/960px-Concert_de_musique_chinoise_Nanguan_%28Auditorium_du_mus%C3%A9e_Guimet%29_%288027971895%29.jpg"
+      img: imgNanguanMusic
     },
     {
       id: 3,
       title: "德化白瓷国际巡展收官：感受“中国白”泥与火的东方神韵",
       date: "2024-03-12",
       views: "8.9k",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/MET_DP170116.jpg/960px-MET_DP170116.jpg"
+      img: imgDehuaPorcelain
     },
     {
       id: 4,
       title: "非遗大师走进安海镇，在安平桥讲述古代造桥智慧与跨代传承",
       date: "2024-04-10",
       views: "5.6k",
-      img: "https://upload.wikimedia.org/wikipedia/commons/0/0b/%E5%AE%89%E6%B5%B7%E9%8E%AE%E7%9A%84%E5%AE%89%E5%B9%B3%E6%A9%8B.JPG"
+      img: imgAnpingBridge
     }
   ];
 
@@ -41,7 +47,7 @@ export default function News() {
         <section className="relative h-44 w-full rounded-2xl overflow-hidden shadow-lg border border-[#D1CEC8] active:scale-[0.99] transition-transform cursor-pointer bg-[#A68966]">
           <div 
             className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-80" 
-            style={{ backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Tieguanyin2.jpg/960px-Tieguanyin2.jpg')` }} 
+            style={{ backgroundImage: `url(${imgTieguanyin})` }} 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <div className="absolute top-4 right-4 flex items-center bg-[#8B2323] text-white text-[9px] px-2 py-1 rounded font-bold tracking-widest uppercase opacity-90 shadow-sm">

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Download } from "lucide-react";
+import imgKaiyuanTemple from '../assets/images/kaiyuan_temple.jpg';
 
 export default function Poster() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function Poster() {
         {/* Background Image / Texture */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Quanzhou_Kaiyuan_Temple-the_Hall_of_Mahavira.jpg/960px-Quanzhou_Kaiyuan_Temple-the_Hall_of_Mahavira.jpg" 
+            src={imgKaiyuanTemple}
             alt="Background" 
             className="w-full h-full object-cover opacity-30 mix-blend-overlay grayscale"
           />

@@ -2,6 +2,10 @@ import React, { useRef, useEffect, useState } from "react";
 import { Music, Drama, Flame, Map, ChevronRight, Users, Film } from "lucide-react";
 import { cn } from "../lib/utils";
 
+import imgQuanzhouOldCity from '../assets/images/quanzhou_old_city.jpg';
+import imgNanguanMusic from '../assets/images/nanguan_music.jpg';
+import imgPuppetMonkey from '../assets/images/puppet_monkey.jpg';
+
 export default function Home() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -9,17 +13,17 @@ export default function Home() {
   const carouselImages = [
     {
       id: 1,
-      src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/20230130_Old_City_of_Quanzhou_01.jpg/960px-20230130_Old_City_of_Quanzhou_01.jpg",
+      src: imgQuanzhouOldCity,
       title: "世界遗产 · 宋元泉州",
     },
     {
       id: 2,
-      src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Concert_de_musique_chinoise_Nanguan_%28Auditorium_du_mus%C3%A9e_Guimet%29_%288027971895%29.jpg/960px-Concert_de_musique_chinoise_Nanguan_%28Auditorium_du_mus%C3%A9e_Guimet%29_%288027971895%29.jpg",
+      src: imgNanguanMusic,
       title: "千年古乐 · 泉州南音",
     },
     {
       id: 3,
-      src: "https://upload.wikimedia.org/wikipedia/commons/7/72/Taiwan-Puppet-Monkey-god2.jpg",
+      src: imgPuppetMonkey,
       title: "掌上绝技 · 布袋木偶",
     },
   ];

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Settings, Bookmark, Heart, Image as ImageIcon, ChevronRight, Store, Medal, History } from "lucide-react";
+import imgAvatar from '../assets/images/avatar.jpg';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function Profile() {
         <div className="flex items-center space-x-4 relative z-10">
           <div className="w-14 h-14 rounded-full bg-[#EFECE7] p-1 shrink-0 border border-[#8B2323]">
             <img 
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80" 
+              src={imgAvatar}
               alt="Avatar" 
               className="w-full h-full rounded-full object-cover grayscale opacity-90"
             />

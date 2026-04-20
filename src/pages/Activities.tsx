@@ -1,6 +1,10 @@
 import { MapPin, Clock, Search, SlidersHorizontal } from "lucide-react";
 import { cn } from "../lib/utils";
 
+import imgMarionette from '../assets/images/marionette.jpg';
+import imgKaiyuanTemple from '../assets/images/kaiyuan_temple.jpg';
+import imgAnpingBridge from '../assets/images/anping_bridge.jpg';
+
 export default function Activities() {
   const categories = ["全部", "非遗演出", "展览讲座", "手工体验", "研学踩线"];
   
@@ -11,7 +15,7 @@ export default function Activities() {
       desc: "我国唯一拥有独立剧种的提线木偶艺术，感受“十指可做百万兵”的传承魅力。",
       time: "每周二至周日",
       location: "木偶剧院",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Marionette_-_in_Japan_-_2018_1_21.webm/960px--Marionette_-_in_Japan_-_2018_1_21.webm.jpg",
+      img: imgMarionette,
       status: "售票中",
       tag: "非遗演出"
     },
@@ -21,7 +25,7 @@ export default function Activities() {
       desc: "跟随文化学者探访福建省规模最大佛教寺院，领略宋元石雕艺术。",
       time: "每周六 09:30",
       location: "开元寺",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Quanzhou_Kaiyuan_Temple-the_Hall_of_Mahavira.jpg/960px-Quanzhou_Kaiyuan_Temple-the_Hall_of_Mahavira.jpg",
+      img: imgKaiyuanTemple,
       status: "预约中",
       tag: "展览讲座"
     },
@@ -31,7 +35,7 @@ export default function Activities() {
       desc: "探访现存最长海港大石桥，感受古代桥梁建筑巅峰及红砖文化。",
       time: "常态化全天",
       location: "安平桥景区",
-      img: "https://upload.wikimedia.org/wikipedia/commons/0/0b/%E5%AE%89%E6%B5%B7%E9%8E%AE%E7%9A%84%E5%AE%89%E5%B9%B3%E6%A9%8B.JPG",
+      img: imgAnpingBridge,
       status: "免费开放",
       tag: "研学踩线"
     }
