@@ -1,14 +1,14 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Music, Drama, Flame, Map, ChevronRight, Users, Film } from "lucide-react";
 import { cn } from "../lib/utils";
 
-import imgQuanzhouOldCity from '../assets/images/quanzhou_old_city.jpg';
-import imgNanguanMusic from '../assets/images/nanguan_music.jpg';
-import imgPuppetMonkey from '../assets/images/puppet_monkey.jpg';
+import imgQuanzhouOldCity from "../assets/images/quanzhou_old_city.jpg";
+import imgNanguanMusic from "../assets/images/nanguan_music.jpg";
+import imgPuppetMonkey from "../assets/images/puppet_monkey.jpg";
 
 export default function Home() {
-  const carouselRef = useRef<HTMLDivElement>(null);
   const [activeSlide, setActiveSlide] = useState(0);
+  const touchStartX = useRef<number | null>(null);
 
   const carouselImages = [
     {
@@ -30,29 +30,42 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (carouselRef.current) {
-        const { scrollLeft, clientWidth, scrollWidth } = carouselRef.current;
-        const nextScroll = scrollLeft + clientWidth;
-        const isEnd = nextScroll >= scrollWidth - 10;
-        
-        carouselRef.current.scrollTo({
-          left: isEnd ? 0 : nextScroll,
-          behavior: "smooth"
-        });
-      }
+      setActiveSlide((current) => (current + 1) % carouselImages.length);
     }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const index = Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth);
-    setActiveSlide(index);
+    return () => clearInterval(interval);
+  }, [carouselImages.length]);
+
+  const goToSlide = (index: number) => {
+    setActiveSlide((index + carouselImages.length) % carouselImages.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    const startX = touchStartX.current;
+    const endX = e.changedTouches[0]?.clientX ?? null;
+
+    touchStartX.current = null;
+
+    if (startX === null || endX === null) return;
+
+    const deltaX = startX - endX;
+    if (Math.abs(deltaX) < 40) return;
+
+    if (deltaX > 0) {
+      goToSlide(activeSlide + 1);
+    } else {
+      goToSlide(activeSlide - 1);
+    }
   };
 
   const categories = [
     { icon: Drama, label: "提线木偶" },
     { icon: Music, label: "南音古乐" },
-    { icon: Flame, label: "乌龙茶技" },
+    { icon: Flame, label: "乌龙茶艺" },
     { icon: Map, label: "海丝遗存" },
   ];
 
@@ -70,42 +83,56 @@ export default function Home() {
     {
       id: 3,
       title: "红砖古厝摄影体验营",
-      location: "西街旧面粉厂 · 持续中",
-    }
+      location: "西街旧面粉厂 · 持续开放",
+    },
   ];
 
   return (
     <div className="flex flex-col pb-6 space-y-5 pt-4">
       {/* Carousel */}
       <div className="px-4">
-        <section className="relative h-48 w-full rounded-2xl overflow-hidden shadow-lg bg-[#A68966]">
-          <div 
-            ref={carouselRef}
-            onScroll={handleScroll}
-            className="flex overflow-x-auto h-full snap-x snap-mandatory no-scrollbar"
+        <section className="relative h-48 w-full overflow-hidden rounded-2xl bg-[#A68966] shadow-lg">
+          <div
+            className="flex h-full overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            {carouselImages.map((img) => (
-              <div key={img.id} className="w-full h-full shrink-0 snap-center relative">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-80" 
-                  style={{ backgroundImage: `url(${img.src})` }} 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="px-2 py-0.5 bg-[#8B2323] text-white text-[9px] uppercase tracking-widest font-bold rounded-sm shadow-sm inline-block mb-1.5">人类非物质文化遗产</span>
-                  <h2 className="text-2xl font-bold text-white leading-tight tracking-tight italic">
-                    {img.title.split('·')[0]} <span className="text-xl opacity-90">· {img.title.split('·')[1]}</span>
-                  </h2>
+            <div
+              className="flex h-full w-full transition-transform duration-500 ease-out"
+              style={{ transform: `translate3d(-${activeSlide * 100}%, 0, 0)` }}
+            >
+              {carouselImages.map((img) => (
+                <div key={img.id} className="relative h-full w-full shrink-0">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center mix-blend-multiply opacity-80"
+                    style={{ backgroundImage: `url(${img.src})` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <span className="mb-1.5 inline-block rounded-sm bg-[#8B2323] px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white shadow-sm">
+                      非遗文化
+                    </span>
+                    <h2 className="text-2xl font-bold leading-tight tracking-tight text-white italic">
+                      {img.title}
+                    </h2>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
           {/* Indicators */}
           <div className="absolute bottom-4 right-4 flex gap-1">
             {carouselImages.map((_, i) => (
-              <div 
-                key={i} 
-                className={cn("h-1 rounded-full transition-all", activeSlide === i ? "w-6 bg-white" : "w-1.5 bg-white/40")}
+              <button
+                key={i}
+                type="button"
+                onClick={() => goToSlide(i)}
+                aria-label={`切换到第 ${i + 1} 张轮播图`}
+                className={cn(
+                  "h-1 rounded-full transition-all cursor-pointer",
+                  activeSlide === i ? "w-6 bg-white" : "w-1.5 bg-white/40"
+                )}
               />
             ))}
           </div>
@@ -117,8 +144,11 @@ export default function Home() {
         {categories.map((cat, idx) => {
           const Icon = cat.icon;
           return (
-            <div key={idx} className="flex flex-col items-center gap-1.5 cursor-pointer active:scale-95 transition-transform">
-              <div className="w-12 h-12 rounded-[14px] bg-white shadow-sm flex items-center justify-center border border-[#E5E1D9] text-[#2C2C2C]">
+            <div
+              key={idx}
+              className="flex cursor-pointer flex-col items-center gap-1.5 transition-transform active:scale-95"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-[14px] border border-[#E5E1D9] bg-white text-[#2C2C2C] shadow-sm">
                 <Icon size={20} strokeWidth={1.5} />
               </div>
               <span className="text-[10px] font-bold uppercase tracking-wider">{cat.label}</span>
@@ -127,68 +157,77 @@ export default function Home() {
         })}
       </section>
 
-      {/* Action Cards (New Section) */}
-      <section className="px-4 flex gap-3">
-        <div className="flex-1 bg-white border border-[#D1CEC8] rounded-xl p-3 shadow-sm flex items-center gap-3 cursor-pointer active:bg-gray-50 transition-colors">
-          <div className="w-10 h-10 bg-[#8B2323]/10 text-[#8B2323] rounded-full flex items-center justify-center shrink-0">
+      {/* Action Cards */}
+      <section className="flex gap-3 px-4">
+        <div className="flex flex-1 cursor-pointer items-center gap-3 rounded-xl border border-[#D1CEC8] bg-white p-3 shadow-sm transition-colors active:bg-gray-50">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8B2323]/10 text-[#8B2323]">
             <Users size={18} />
           </div>
           <div>
             <h4 className="text-xs font-bold text-[#2C2C2C]">非遗大咖</h4>
-            <p className="text-[9px] opacity-60 mt-0.5 tracking-wider">探访百位技艺传人</p>
+            <p className="mt-0.5 text-[9px] tracking-wider opacity-60">探访百位技艺传承人</p>
           </div>
         </div>
-        <div className="flex-1 bg-white border border-[#D1CEC8] rounded-xl p-3 shadow-sm flex items-center gap-3 cursor-pointer active:bg-gray-50 transition-colors">
-          <div className="w-10 h-10 bg-[#8B2323]/10 text-[#8B2323] rounded-full flex items-center justify-center shrink-0">
+        <div className="flex flex-1 cursor-pointer items-center gap-3 rounded-xl border border-[#D1CEC8] bg-white p-3 shadow-sm transition-colors active:bg-gray-50">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8B2323]/10 text-[#8B2323]">
             <Film size={18} />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-[#2C2C2C]">数字展厅</h4>
-            <p className="text-[9px] opacity-60 mt-0.5 tracking-wider">3D云游世遗泉州</p>
+            <h4 className="text-xs font-bold text-[#2C2C2C]">数字展馆</h4>
+            <p className="mt-0.5 text-[9px] tracking-wider opacity-60">3D云游世遗泉州</p>
           </div>
         </div>
       </section>
 
-      {/* Intro Section - Compact */}
-      <section className="bg-white border border-[#D1CEC8] p-4 space-y-3 mx-4 rounded-2xl shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-[#8B2323]/5 rounded-full -translate-y-8 translate-x-8"></div>
-        <div className="flex justify-between items-end border-b border-[#F0F0EE] pb-2 relative z-10">
+      {/* Intro Section */}
+      <section className="relative mx-4 space-y-3 overflow-hidden rounded-2xl border border-[#D1CEC8] bg-white p-4 shadow-sm">
+        <div className="absolute right-0 top-0 h-24 w-24 -translate-y-8 translate-x-8 rounded-full bg-[#8B2323]/5" />
+        <div className="relative z-10 flex items-end justify-between border-b border-[#F0F0EE] pb-2">
           <h3 className="text-xs font-black italic tracking-widest text-[#8B2323]">QUANZHOU HERITAGE</h3>
           <span className="text-[9px] opacity-40">UNESCO-2021</span>
         </div>
-        <div className="grid grid-cols-2 gap-4 relative z-10">
+        <div className="relative z-10 grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <p className="text-[10px] font-bold uppercase opacity-60 tracking-tighter">文化渊源</p>
-            <p className="text-[10px] leading-relaxed line-clamp-3">古称“刺桐”，联合国教科文组织认定的海上丝绸之路起点。“宋元中国的世界海洋商贸中心”尽显深厚底蕴。</p>
+            <p className="text-[10px] font-bold uppercase tracking-tighter opacity-60">文化渊源</p>
+            <p className="text-[10px] leading-relaxed line-clamp-3">
+              泉州古称“刺桐”，是海上丝绸之路的重要起点，拥有深厚的历史积淀和多元文化交汇的城市气质。
+            </p>
           </div>
           <div className="space-y-1.5">
-            <p className="text-[10px] font-bold uppercase opacity-60 tracking-tighter">传承体系</p>
-            <p className="text-[10px] leading-relaxed line-clamp-3">拥抱南音、木偶戏等6项世界级非遗，及多项国家级瑰宝。“见人见物见生活”的活态传承在此生生不息。</p>
+            <p className="text-[10px] font-bold uppercase tracking-tighter opacity-60">传承体系</p>
+            <p className="text-[10px] leading-relaxed line-clamp-3">
+              这里保存着南音、木偶戏、茶文化等多项世界级非遗，以活态传承的方式延续千年文脉。
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Highlights - Tighter Scroll */}
+      {/* Highlights */}
       <section className="px-4 space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-base font-bold flex items-center gap-2">
-            <span className="w-1 h-4 bg-[#8B2323]"></span> 推荐活动
+          <h3 className="flex items-center gap-2 text-base font-bold">
+            <span className="h-4 w-1 bg-[#8B2323]" />
+            推荐活动
           </h3>
-          <span className="text-[10px] text-[#2C2C2C] opacity-50 flex items-center">查看全部 <ChevronRight size={12} /></span>
+          <span className="flex items-center text-[10px] text-[#2C2C2C] opacity-50">
+            查看全部 <ChevronRight size={12} />
+          </span>
         </div>
         <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x pr-4">
           {highlights.map((item, index) => (
-            <div 
-              key={item.id} 
+            <div
+              key={item.id}
               className={cn(
                 "min-w-[160px] h-24 rounded-xl p-3 flex flex-col justify-between border snap-start shrink-0 cursor-pointer active:scale-95 transition-transform",
-                index === 0 
-                  ? "bg-white border-2 border-[#8B2323] shadow-md text-[#8B2323]" 
+                index === 0
+                  ? "bg-white border-2 border-[#8B2323] shadow-md text-[#8B2323]"
                   : "bg-[#EFECE7] border-[#D1CEC8] text-[#2C2C2C]"
               )}
             >
-              <p className={cn("text-xs font-bold leading-snug tracking-tight", index === 0 && "text-[#8B2323]")}>{item.title}</p>
-              <p className="text-[9px] opacity-60 italic mt-2">{item.location}</p>
+              <p className={cn("text-xs font-bold leading-snug tracking-tight", index === 0 && "text-[#8B2323]")}>
+                {item.title}
+              </p>
+              <p className="mt-2 text-[9px] italic opacity-60">{item.location}</p>
             </div>
           ))}
         </div>
